@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with shared payment details",
+      "type": "object",
+      "properties": {
+        "paymentProfile": {
+          "type": "object",
+          "properties": {
+            "venmoUsername": { "type": "string" },
+            "zelleContact": { "type": "string" },
+            "cryptoWallet": { "type": "string" },
+            "squareMerchantId": { "type": "string" },
+            "ownerName": { "type": "string" }
+          }
+        }
+      }
+    },
+    "Receipt": {
+      "title": "Receipt",
+      "description": "A saved historical receipt split",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date-time" },
+        "total": { "type": "number" },
+        "restaurant": { "type": "string" },
+        "people": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "total": { "type": "number" }
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "price": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User account data"
+    },
+    "users/{userId}/receipts/{receiptId}": {
+      "schema": "Receipt",
+      "description": "User historical receipts"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // User Profile
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUser(request.resource.data);
+      
+      function isValidUser(data) {
+        return data.keys().hasAll(['paymentProfile']) 
+          && data.paymentProfile is map
+          && data.paymentProfile.get('venmoUsername', '') is string
+          && data.paymentProfile.get('zelleContact', '') is string
+          && data.paymentProfile.get('cryptoWallet', '') is string
+          && data.paymentProfile.get('squareMerchantId', '') is string
+          && data.paymentProfile.get('ownerName', '') is string
+          && (
+            // Create case
+            (data.keys().size() == 2 && data.createdAt is timestamp) ||
+            // Update case
+            (data.keys().size() == 1) ||
+            // Merge case / existing
+            (data.keys().hasAll(['createdAt']) && data.createdAt is timestamp)
+          );
+      }
+
+      // Receipts subcollection
+      match /receipts/{receiptId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidReceipt(request.resource.data);
+        allow update, delete: if false; // Receipts are immutable for now as per requirements
+
+        function isValidReceipt(data) {
+          return data.keys().hasAll(['date', 'total', 'restaurant', 'people', 'items'])
+            && data.keys().size() == 5
+            && data.date is timestamp
+            && data.total is number
+            && data.restaurant is string
+            && data.people is list
+            && data.items is list;
+        }
+      }
+    }
+  }
+}

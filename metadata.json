@@ -1,0 +1,8 @@
+{
+  "name": "Receipt",
+  "description": "A smart mobile-first bill splitting app with OCR technology.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}
