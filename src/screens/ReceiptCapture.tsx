@@ -29,7 +29,6 @@ const ReceiptCapture: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress]     = useState(0);
   const [showMock, setShowMock]     = useState(false);
-  const [mockZoomed, setMockZoomed] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,14 +203,14 @@ const ReceiptCapture: React.FC = () => {
       {/* ── Mock Receipt Modal ── */}
       <AnimatePresence>
         {showMock && (
-          <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+          <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center md:items-center md:p-8">
             {/* Backdrop */}
             <motion.div
               key="mock-backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => { setShowMock(false); setMockZoomed(false); }}
+              onClick={() => { setShowMock(false); }}
               className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             />
 
@@ -222,7 +221,7 @@ const ReceiptCapture: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 32, stiffness: 250, mass: 0.8 }}
-              className="relative w-full bg-[#111118] rounded-t-[36px] overflow-hidden flex flex-col shadow-2xl"
+              className="relative w-full md:w-[440px] md:max-w-[440px] bg-[#111118] rounded-t-[36px] md:rounded-3xl overflow-hidden flex flex-col shadow-2xl"
               style={{ maxHeight: '92vh' }}
             >
               {/* Handle + close */}
@@ -234,7 +233,7 @@ const ReceiptCapture: React.FC = () => {
                     <p className="text-text-secondary text-[11px] mt-0.5">590 George St · New Brunswick</p>
                   </div>
                   <button
-                    onClick={() => { setShowMock(false); setMockZoomed(false); }}
+                    onClick={() => { setShowMock(false); }}
                     className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors"
                   >
                     <X size={20} />
@@ -248,15 +247,10 @@ const ReceiptCapture: React.FC = () => {
                   <img
                     src="/receipt_example.png"
                     alt="Sample receipt"
-                    className={`w-full transition-all duration-300 cursor-zoom-in ${mockZoomed ? 'object-contain max-h-[60vh]' : 'object-cover max-h-[42vh]'}`}
-                    onClick={() => setMockZoomed(z => !z)}
+                    className="w-full object-contain"
+                    style={{ maxHeight: '420px' }}
                   />
-                  <button
-                    onClick={() => setMockZoomed(z => !z)}
-                    className="absolute top-3 right-3 w-8 h-8 bg-black/60 rounded-full flex items-center justify-center text-white/70 hover:text-white"
-                  >
-                    <ZoomIn size={15} />
-                  </button>
+
                   <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-t from-[#09090e] to-transparent pointer-events-none" />
                 </div>
 

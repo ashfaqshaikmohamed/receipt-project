@@ -488,7 +488,7 @@ const Home: React.FC = () => {
       {createPortal(
         <AnimatePresence>
           {showTutorial && (
-            <div className="fixed inset-0 z-[100] flex flex-col justify-end">
+            <div className="fixed inset-0 z-[100] flex flex-col justify-end md:justify-center md:items-center md:p-8">
               <motion.div
                 key="tut-backdrop"
                 initial={{ opacity: 0 }}
@@ -500,12 +500,12 @@ const Home: React.FC = () => {
 
               <motion.div
                 key="tut-sheet"
-                initial={{ y: '100%' }}
-                animate={{ y: 0 }}
-                exit={{ y: '100%' }}
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '100%', opacity: 0 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 240, mass: 0.9 }}
-                className="relative w-full bg-[#0e0e16] rounded-t-[40px] overflow-hidden flex flex-col shadow-2xl"
-                style={{ height: '88vh' }}
+                className="relative w-full md:w-[480px] md:max-w-[480px] bg-[#0e0e16] rounded-t-[40px] md:rounded-3xl overflow-hidden flex flex-col shadow-2xl"
+                style={{ height: '88vh', maxHeight: '680px' }}
               >
                 {/* Drag handle + close */}
                 <div className="flex-shrink-0 flex flex-col items-center pt-3 px-6 mb-1">
