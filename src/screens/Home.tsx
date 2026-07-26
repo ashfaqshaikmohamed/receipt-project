@@ -19,6 +19,9 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useBill } from '../BillContext';
+import { MOCK_PARSED, MOCK_PEOPLE } from '../utils/mockData';
+import MockReceiptModal from '../components/MockReceiptModal';
 
 // ─── Tutorial slides data ────────────────────────────────────────────────────
 const SLIDES = [
@@ -260,11 +263,25 @@ const CountingValue: React.FC<{ value: number; delay?: number }> = ({ value, del
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { user, signInWithGoogle, signOut, loading, authError, setAuthError } = useAuth();
+  const { setPeople, setItems } = useBill();
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showMock, setShowMock] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   // Auto-open tutorial after a brief delay on first visit
   const [tutorialAutoOpened, setTutorialAutoOpened] = useState(false);
+
+  // Launched straight from Home (no Table Setup yet), so also seed the two
+  // demo diners — otherwise Assign/Split would have no one to split with.
+  const handleUseMock = () => {
+    setPeople(MOCK_PEOPLE);
+    setItems(MOCK_PARSED.items.map(item => ({
+      ...item,
+      assignedTo: [],
+      comped: false,
+    })));
+    navigate('/review', { state: { parsed: MOCK_PARSED } });
+  };
 
   useEffect(() => {
     const moveCursor = (e: MouseEvent) => setCursorPos({ x: e.clientX, y: e.clientY });
@@ -298,6 +315,20 @@ const Home: React.FC = () => {
   return (
     <>
       <div className="custom-cursor hidden md:block" style={{ left: cursorPos.x, top: cursorPos.y }} />
+
+      {/* Small, unobtrusive demo entry point */}
+      <motion.button
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setShowMock(true)}
+        style={{ top: 'max(1.25rem, env(safe-area-inset-top))' }}
+        className="fixed right-5 z-30 flex items-center gap-1.5 bg-surface/60 backdrop-blur-md border border-white/10 text-text-secondary hover:text-accent hover:border-accent/30 text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors"
+      >
+        <Sparkles size={11} />
+        Try me
+      </motion.button>
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -676,6 +707,12 @@ const Home: React.FC = () => {
         </AnimatePresence>,
         document.body
       )}
+
+      <MockReceiptModal
+        open={showMock}
+        onClose={() => setShowMock(false)}
+        onUse={handleUseMock}
+      />
     </>
   );
 };
