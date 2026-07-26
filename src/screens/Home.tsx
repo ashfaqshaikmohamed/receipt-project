@@ -316,20 +316,6 @@ const Home: React.FC = () => {
     <>
       <div className="custom-cursor hidden md:block" style={{ left: cursorPos.x, top: cursorPos.y }} />
 
-      {/* Small, unobtrusive demo entry point */}
-      <motion.button
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setShowMock(true)}
-        style={{ top: 'max(1.25rem, env(safe-area-inset-top))' }}
-        className="fixed right-5 z-30 flex items-center gap-1.5 bg-surface/60 backdrop-blur-md border border-white/10 text-text-secondary hover:text-accent hover:border-accent/30 text-[11px] font-bold px-3 py-1.5 rounded-full transition-colors"
-      >
-        <Sparkles size={11} />
-        Try me
-      </motion.button>
-
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -411,8 +397,20 @@ const Home: React.FC = () => {
             className="mt-8 text-accent font-semibold text-sm flex items-center gap-2 hover:brightness-125 active:scale-95 transition-all group"
           >
             <Sparkles size={16} />
-            See how it works
+            Tutorial
             <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </motion.button>
+
+          <motion.button
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.55 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => setShowMock(true)}
+            className="mt-4 h-12 px-6 bg-surface/70 backdrop-blur-md border border-accent/25 text-accent font-bold rounded-2xl text-sm flex items-center gap-2 hover:bg-accent/10 hover:border-accent/40 transition-colors"
+          >
+            <Sparkles size={16} />
+            Try Mock Receipt
           </motion.button>
         </div>
 

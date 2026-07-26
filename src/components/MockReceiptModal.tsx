@@ -108,7 +108,7 @@ const MockReceiptModal: React.FC<MockReceiptModalProps> = ({ open, onClose, onUs
                 className="w-full h-14 bg-accent text-white font-bold rounded-2xl text-base shadow-xl shadow-accent/20 flex items-center justify-center gap-2"
               >
                 <Sparkles size={18} />
-                Use This Receipt
+                Try Mock Receipt
               </motion.button>
             </div>
           </motion.div>
